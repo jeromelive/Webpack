@@ -38,12 +38,14 @@ __包含四个核心概念：__
 
 ### 最简单的 Webpack 打包配置
 
-> dist
->> index.html
-> src
->> Greeter.js
->> main.js
-> webpack.config.js
+> dist      
+>> index.html 
+
+> src                  
+>> Greeter.js     
+>> main.js   
+    
+> webpack.config.js             
 
 ```
 // webpack.config.js

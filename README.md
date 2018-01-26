@@ -122,6 +122,7 @@ loader 用于对模块的源代码进行转换。类似于其他构建工具中�
 
 * test: 正则表达式用于匹配 loader 所处理的文件的拓展名(必须)
 * loader: loader 的名称(必须)
+* use: 
 * include/exclude: 添加必须处理的文件（文件夹）或不需要处理的文件（文件夹）（可选）
 * query: 为 loader 提供额外的设置选项（可选）
 
@@ -196,102 +197,65 @@ npm install --save react react-dom
 
 > 更多常见的模块配置参考https://www.jianshu.com/p/42e11515c10f
 
+## 插件(Plugins)
 
-## build 目录包含 webpack 个版本打包逻辑
+> Loader 是在打包构建过程中用来开开处理源文件的(JSX,Scss,Less...), Plugins 并不是直接操作单个文件，而是对整个构建过程其作用。
 
-__目录结构如下__
+要使用插件需要在Webpack 配置中的 plugins 关键字部分添加该插件的一个势力(plugins为体格数组)
 
-> build             
->> build-testing.js     
->> build-config.js      
->> build.js       
->> utils.js        
->> vue-loader.config.js              
->> webpack.base.config.js -- 基础打包配置            
->> webpack.dev.config.js -- dev 环境             
->> webpack.prod.config.js -- production 环境            
->> webpack.test.config.js
+## 常用的插件
 
-### webpack.base.config.js
+__webpack.BannerPlugins__ 该插件为打包后的js代码添加备注
+__HtmlWebpackPlugin__ 依据指定的index.html模板生产一个自动引用打包后的JS文件的新index.html,如果每次生成的js文件名称不同时非常有用
+__hot-module-replacement__ 热加载
 
-> 为公用的打包配置文件，以下打包文件都以该文件为基础进行拓展
+## 产品阶段的构建
 
-```
-/**
-*  其他的配置文件通过 webpack-merge 合并 webpack.base.config.js 并进行拓展
-*/
-const merge = rquire('webpack-merge');
-const baseWebpackConfig = require('./webpack.base.config');
+在产品阶段可能要对打包的文件进行额外的处理，比如优化、压缩、缓存以及分离 CSS 和 JS
 
-const webpackConfig = merge(baseWebpackConfig, {
-  module: {}
-  ······
-})
-
-module.exports = webpackConfig;
-```
+优化插件
+* OccurenceOrderPlugin 为组件分配ID，通过这个插件webpack可以分析和优先考虑使用最多的模块，并为它们分配最小的ID
+* UglifyJsPlugin 压缩JS代码
+* ExtractTextPlugin 分离CSS和JS文件
 
 ```
-"use strict";
+plugins: [
+  new webpack.BannerPlugin('版权所有，翻版必究'),
+  new HtmlWebpackPlugin({
+      template: __dirname + "/app/index.tmpl.html"
+  }),
+  new webpack.optimize.OccurrenceOrderPlugin(),
+  new webpack.optimize.UglifyJsPlugin(),
+  new ExtractTextPlugin("style.css")
+]
+```
 
-const path = require("path");
-const config = require("./build.conf");
-const utils = require("./utils");
-const projectRoot = path.resolve(__dirname, "../");
+## 缓存
 
-module.exports = {
-  entry: {
-    app: ["./client/index.js"],
-    vendor: ["vue", "vue-router", "vuex", "vuex-router-sync"]
-  },
-  output: {
-    path: path.join(__dirname, '../dist/csp')
-  },
-  resolve: {
-    extensions: [".js", ".vue", ".css", ".json"],
-    alias: {
-      package: path.resolve(__dirname, "../package.json"),
-      src: path.resolve(__dirname, "../client"),
-      assets: path.resolve(__dirname, "../client/assets"),
-      components: path.resolve(__dirname, "../client/components"),
-      views: path.resolve(__dirname, "../client/views"),
-      "plotly.js": "plotly.js/dist/plotly",
-      "vuex-store": path.resolve(__dirname, "../client/store")
-    }
-  },
-  module: {
-    loaders: [
-      {
-        test: /\.vue$/,
-        loader: "vue-loader",
-        options: require("./vue-loader.conf")
-      },
-      {
-        test: /\.js$/,
-        loader: "babel-loader",
-        include: projectRoot,
-        exclude: [new RegExp(`node_modules\\${path.sep}(?!vue-bulma-.*)`)]
-      },
-      {
-        test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
-        loader: "url-loader",
-        query: {
-          limit: 10000,
-          name: utils.assetsPath("img/[name].[hash:7].[ext]")
-        }
-      },
-      {
-        test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
-        loader: "url-loader",
-        query: {
-          limit: 10000,
-          name: utils.assetsPath("fonts/[name].[hash:7].[ext]")
-        }
-      }
-    ]
-  },
-  performance: {
-    hints: false
-  }
-};
+webpack 可以把一个哈希值添加到打包的文件名中，一般添加特殊的字符混合体([name],[id]and[hash])到输出文件名前，webapck 会根据文件是否修改而打包出不同的文件名（文件内容和文件名匹配，即内容改变，名称相应改变）
+```
+···
+output: {
+    path: __dirname + "/build",
+    filename: "bundle-[hash].js"
+},
+···
+```
+
+## 去除打包目录中的残余文件 
+
+> clean-webpack-plugin 插件
+
+添加了hash之后，会导致改变文件内容后重新打包时，文件名不同而内容越来越多，因此这里介绍另外一个很好用的插件clean-webpack-plugin。
+
+```
+···
+plugins: [
+  ...// 这里是之前配置的其它各种插件
+  new CleanWebpackPlugin('build/*.*', {
+    root: __dirname,
+    verbose: true,
+    dry: false
+  })
+···
 ```

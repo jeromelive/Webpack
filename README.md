@@ -44,11 +44,11 @@ __包含四个核心概念：__
 > src                  
 >> Greeter.js     
 >> main.js   
-    
+
 > webpack.config.js             
 
+__webpack.config.js__
 ```
-// webpack.config.js
 const path = require('path');
 module.exports = function buildCon(env) {
   console.log(env);
@@ -60,8 +60,10 @@ module.exports = function buildCon(env) {
     }
   }
 }
+```
 
-// dist/index.html
+__dist/index.html__
+```
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -75,15 +77,19 @@ module.exports = function buildCon(env) {
   <script src="./bundle.js"></script>
 </body>
 </html>
+```
 
-// src/Greeter.js
+__src/Greeter.js__
+```
 module.exports = function() {
   var greet = document.createElement('div');
   greet.textContent = "Hi there and greetings!";
   return greet;
 };
+```
 
-// src/main.js
+__src/main.js__
+```
 const greeter = require('./Greeter.js');
 document.querySelector('#root').appendChild(greeter());
 

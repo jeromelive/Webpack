@@ -6,7 +6,7 @@
 ## package.json
 > 首先了解 package.json 文件
 
-### 该 JSON 文件中通常包含了以下属性
+* ++该 JSON 文件中通常包含了以下属性++
 * name
 * version
 * ······
@@ -29,5 +29,15 @@
 
 ## build 目录包含 webpack 个版本打包逻辑
 
-```
-```
+> 目录结构如下
+
++-- build
+|   + -- build-testing.js
+|   + -- build-config.js
+|   + -- build.js
+|   + -- utils.js
+|   + -- vue-loader.config.js
+|   + -- webpack.base.config.js 
+|   + -- webpack.dev.config.js 
+|   + -- webpack.prod.config.js 
+|   + -- webpack.test.config.js 

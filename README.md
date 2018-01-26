@@ -22,5 +22,5 @@
     "test": "npm run lint"
   }
 
-  script 主要是为 node 运行代码提供快捷运行方式
+  script 主要是为 node 运行代码提供快捷运行方式，通过 npm run * 运行，start 除外
 ```

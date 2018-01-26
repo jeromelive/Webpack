@@ -93,9 +93,109 @@ __src/main.js__
 const greeter = require('./Greeter.js');
 document.querySelector('#root').appendChild(greeter());
 
-CMD 中运行 webpack --env=dev 会在 dist 目录下打包生成一个bundle.js，并且打印 env 参数
 ```
+CMD 中运行 webpack --env=dev 会在 dist 目录下打包生成一个bundle.js，并且打印 env 参数
 ![alt](./images/20180126151111.png)
+
+### devtool
+
+开发环境中一般使用 __eval-source-map__ 
+
+>使用eval打包源文件模块，在同一个文件中生成干净的完整的source map。这个选项可以在不影响构建速度的前提下生成完整的sourcemap，但是对打包后输出的JS文件的执行具有性能和安全的隐患。在开发阶段这是一个非常好的选项，在生产阶段则一定不要启用这个选项；
+
+__cheap-module-eval-source-map__ 方法构建速度更快，但是不利于调试，推荐在大型项目考虑时间成本时使用。
+
+### 使用 Webpack 构建本地服务环境
+
+__webpack-dev-server__  可以监听本地开发代码的变化重新打包
+
+| __devserver的配置选项__ | __功能描述__ |
+| -----------------  | ------- |
+| contentBase | 默认webpack-dev-server会为根文件夹提供本地服务器，如果想为另外一个目录下的文件提供本地服务器，应该在这里设置其所在目录 |
+| port | 设置默认监听端口，如果省略，默认为”8080“ |
+| inline | 设置为true，当源文件改变时会自动刷新页面 |
+| historyApiFallback | 在开发单页应用时非常有用，它依赖于HTML5 history API，如果设置为true，所有的跳转将指向index.html |
+
+## Loader
+
+loader 用于对模块的源代码进行转换。类似于其他构建工具中“task”，提供处理前端构建步骤的方法。要使用 loader 需要单独安装并且在配置中的 modules 关键字下进行配置，配置包括以下方面：
+
+* test: 正则表达式用于匹配 loader 所处理的文件的拓展名(必须)
+* loader: loader 的名称(必须)
+* include/exclude: 添加必须处理的文件（文件夹）或不需要处理的文件（文件夹）（可选）
+* query: 为 loader 提供额外的设置选项（可选）
+
+
+## 常见的 loader 配置
+
+### Babel
+
+Babel 主要编译 JavaScript 代码，能够编译最新的 JS 代码(ES6,ES7...)、React的JSX
+
+__Babel__的安装
+
+```
+// npm一次性安装多个依赖模块，模块之间用空格隔开，babel-preset-react是解析 JSX 的包
+npm install --save-dev babel-core babel-loader babel-preset-env babel-preset-react
+```
+
+__Babel__配置
+
+在 webpack.config.js 内
+```
+// webpack.config.js
+....
+module: {
+  rules: [
+    {
+      test: /(\.jsx|\.js)$/,
+      use: {
+        loader: "babel-loader",
+        options: {
+          presets: [
+            "env", "react"
+          ]
+        }
+      },
+      exclude: /node_modules/
+    }
+  ]
+}
+...
+```
+
+babel具有非常多的配置选项，在单一的 wabpack.config.js 文件中进行配置往往比较复杂，可以再外部单独配置名为".babelrc"的配置文件
+```
+// webpack.config.js
+...
+module: {
+  rules: [
+    {
+      test: /(\.jsx|\.js)$/,
+      use: {
+        loader: "babel-loader"
+      },
+      exclude: /node_modules/
+    }
+  ]
+}
+...
+
+// .babelrc
+{
+  "presets": ["react", "env"]
+}
+```
+
+
+__React__ 项目还需要安装一下包
+
+```
+npm install --save react react-dom
+```
+
+> 更多常见的模块配置参考https://www.jianshu.com/p/42e11515c10f
+
 
 ## build 目录包含 webpack 个版本打包逻辑
 

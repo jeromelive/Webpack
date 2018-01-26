@@ -1,0 +1,34 @@
+before_script:
+  - npm install
+
+stages:
+  - test
+  - build
+
+job_test:
+  stage: test
+  except:
+    - tags
+  script:
+    - npm test
+  cache:
+    key: job_test
+    paths:
+      - node_modules/
+
+job_build:
+  stage: build
+  only:
+    - master
+    - integration
+    - pre-production
+    - production
+  artifacts:
+    paths:
+      - $CI_PROJECT_DIR/dist
+  script:
+    - NODE_ENV=$CI_COMMIT_REF_NAME npm run build
+cache:
+  key: job_build
+  paths:
+    - node_modules/

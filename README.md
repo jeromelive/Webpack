@@ -31,13 +31,13 @@
 
 > 目录结构如下
 
-+-- build
-|   + -- build-testing.js
-|   + -- build-config.js
-|   + -- build.js
-|   + -- utils.js
-|   + -- vue-loader.config.js
-|   + -- webpack.base.config.js 
-|   + -- webpack.dev.config.js 
-|   + -- webpack.prod.config.js 
-|   + -- webpack.test.config.js 
++-- build               
+|   + -- build-testing.js     
+|   + -- build-config.js      
+|   + -- build.js       
+|   + -- utils.js        
+|   + -- vue-loader.config.js              
+|   + -- webpack.base.config.js                
+|   + -- webpack.dev.config.js               
+|   + -- webpack.prod.config.js            
+|   + -- webpack.test.config.js                   

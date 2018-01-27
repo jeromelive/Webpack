@@ -6,15 +6,16 @@
   * [devtool](#devtool)
   * [使用Webpack构建本地服务环境](#使用Webpack构建本地服务环境)
   * [Loader](#Loader)
-  * [常见的loader配置](*常见的loader配置)
+  * [常见的loader配置](#常见的loader配置)
     * [Babel](#Babel)
-  * [插件(Plugins)](#插件(Plugins))
+  * [插件Plugins](#插件Plugins)
   * [常用的插件](#常用的插件)
 * [产品阶段的构建](#产品阶段的构建)
 * [缓存](#缓存)
 * [去除打包目录中的残余文件](#去除打包目录中的残余文件)
 
 # package.json
+
 > 首先了解 package.json 文件
 
 **该 JSON 文件中通常包含了以下属性**
@@ -39,6 +40,7 @@
 ```
 
 # 什么是Webpack
+
 Webpack 是一个静态模块打包器：主要负责分析项目结构，找到JavaScript模块以及其它的一些浏览器不能直接运行的拓展语言（Scss,TypeScript等），并将其转换和打包为合适的格式供浏览器使用。
 
 __包含四个核心概念：__
@@ -209,17 +211,17 @@ npm install --save react react-dom
 
 > 更多常见的模块配置参考https://www.jianshu.com/p/42e11515c10f
 
-## 插件(Plugins)
+## 插件Plugins
 
-> Loader 是在打包构建过程中用来开开处理源文件的(JSX,Scss,Less...), Plugins 并不是直接操作单个文件，而是对整个构建过程其作用。
+> Loader 是在打包构建过程中用来处理源文件的(JSX,Scss,Less...), Plugins 并不是直接操作单个文件，而是对整个构建过程其作用。
 
-要使用插件需要在Webpack 配置中的 plugins 关键字部分添加该插件的一个势力(plugins为体格数组)
+要使用插件需要在Webpack 配置中的 plugins 关键字部分添加该插件的一个势力(plugins为数组)
 
 ## 常用的插件
 
-__webpack.BannerPlugins__ 该插件为打包后的js代码添加备注
-__HtmlWebpackPlugin__ 依据指定的index.html模板生产一个自动引用打包后的JS文件的新index.html,如果每次生成的js文件名称不同时非常有用
-__hot-module-replacement__ 热加载
+* __webpack.BannerPlugins__ 该插件为打包后的js代码添加备注
+* __HtmlWebpackPlugin__ 依据指定的index.html模板生产一个自动引用打包后的JS文件的新index.html,如果每次生成的js文件名称不同时非常有用
+* __hot-module-replacement__ 热加载
 
 # 产品阶段的构建
 

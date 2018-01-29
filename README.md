@@ -219,7 +219,7 @@ npm install --save react react-dom
 
 ## 常用的插件
 
-* __webpack.BannerPlugins__ 该插件为打包后的js代码添加备注
+* __webpack.BannerPlugin__ 该插件为打包后的js代码添加备注
 * __HtmlWebpackPlugin__ 依据指定的index.html模板生产一个自动引用打包后的JS文件的新index.html,如果每次生成的js文件名称不同时非常有用
 * __hot-module-replacement__ 热加载
 

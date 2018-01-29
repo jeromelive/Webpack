@@ -43,7 +43,19 @@
 
 Webpack 是一个静态模块打包器：主要负责分析项目结构，找到JavaScript模块以及其它的一些浏览器不能直接运行的拓展语言（Scss,TypeScript等），并将其转换和打包为合适的格式供浏览器使用。
 
-__包含四个核心概念：__
+webpack 运行时参数设置，不是 NODE_NEV 配置
+
+> webpack --env=dev
+
+```
+// webpack.config.js
+module.exports = (env) => {
+  console.log(env) // dev
+  return require(`./build/webpack.${env}.js`)
+}
+```
+
+__webpack.config.js 文件包含四个核心概念：__
 
 * 入口(entry)
 * 输出(output)
